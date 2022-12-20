@@ -1,0 +1,11 @@
+{% extends 'professors/base.html' %}
+<!--prettier ignore -->
+{% load socialaccount %} {% block content %}
+<div>login page</div>
+<button class="btn btn-outline-info">
+  <a href="{% provider_login_url 'google'%}?next=/">
+    <i class="fab fa-google"></i>
+    Login with Google
+  </a>
+</button>
+{% endblock %}

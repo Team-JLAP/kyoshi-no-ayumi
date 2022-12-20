@@ -1,0 +1,45 @@
+{% extends 'professors/base.html' %} {% block content %}
+<!-- Landing Page (Mina) -->
+{% load static %}
+<div>
+  <!--prettier-ignore-->
+  {% if messages %} {% for message in messages %}
+    {% if message.tags == 'error' %}
+  <p class="text-red-500">{{ message }}</p>
+  {% elif message.tags == 'success' %}
+  <p class="text-green-500">{{ message }}</p>
+  {% endif %} {% endfor %} {%endif %}
+  <p>This is landing page</p>
+  <img src="{% static "admin/img/icon-clock.svg" %}" width="50px">
+  <!--prettier-->
+  {% if user.is_authenticated %}
+  <p>You're logged in {{ user.username }}</p>
+  {% endif %}
+  <p>
+    <a class="underline text-blue-500" href="{% url 'search_prof' 'bita' %}"
+      >Search by professor's name bita</a
+    >
+  </p>
+  <p>
+    <a
+      class="underline text-blue-500"
+      href="{% url 'search_course' 'CPSC' '1050' %}"
+      >Searched by course CPSC1050</a
+    >
+  </p>
+</div>
+{% comment %} ここから下がVue.js {% endcomment %}
+<div id="app">
+  <div>[[ message ]]</div>
+
+  <script>
+    var app = new Vue({
+      delimiters: ["[[", "]]"],
+      el: "#app",
+      data: {
+        message: "Hello",
+      },
+    });
+  </script>
+  {% endblock %}
+</div>

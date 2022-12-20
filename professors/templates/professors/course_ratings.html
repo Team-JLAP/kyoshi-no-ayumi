@@ -1,0 +1,19 @@
+{% extends 'professors/base.html' %} {% block content %}
+<!-- This is couse ratings page (Ryota)  -->
+
+<!-- given data
+professor: string
+school: string
+course: string
+avgRating: float
+similarCourses: Course[]
+ratings: Rating[]
+-->
+<div>
+  <p>This is Course ratings page</p>
+  {% for rating in ratings %}
+  <p>{{ rating.rate }}</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

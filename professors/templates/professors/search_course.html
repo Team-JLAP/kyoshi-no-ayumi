@@ -1,0 +1,20 @@
+{% extends 'professors/base.html' %} {% block content %}
+
+<!-- given data
+results: Course[]
+-->
+<div>
+  <p>Here is a list of courses</p>
+  {% for result in results %}
+  <p>
+    <a
+      class="underline text-blue-500"
+      href="{% url 'course_ratings' result.id %}"
+      >{{ result.professor.name}}-{{ result.subject }}
+      {{result.course_number}}</a
+    >
+  </p>
+  {% endfor %}
+</div>
+
+{% endblock %}
