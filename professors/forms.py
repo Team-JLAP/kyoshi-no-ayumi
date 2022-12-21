@@ -1,5 +1,7 @@
 from django import forms
 from .models import Rating
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 class RatingForm(forms.ModelForm):
     class Meta:
@@ -35,3 +37,8 @@ class RatingForm(forms.ModelForm):
             attrs={'class': 'border', 'placeholder': 'Write you comment'}
         ),
     }
+
+class SignUpForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ["username", "password1"]

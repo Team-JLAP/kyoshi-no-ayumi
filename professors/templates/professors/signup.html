@@ -1,6 +1,41 @@
-{% extends 'professors/base.html' %} {% block content %}
+{% extends 'professors/base.html' %}
+<!--prettier ignore -->
+{% load socialaccount %} {% block content %}
+<div>SIgn up page</div>
+  
+ <!--prettier-ignore-->
+  {% if messages %} {% for message in messages %}
+    {% if message.tags == 'error' %}
+  <p class="text-red-500">{{ message }}</p>
+  {% elif message.tags == 'success' %}
+  <p class="text-green-500">{{ message }}</p>
+  {% endif %} {% endfor %} {%endif %}
+  
 <div>
-  <p>Create an Account</p>
-  <p><a class="underline text-blue-500" href="{% url 'login' %}">Login</a></p>
+  <form method="POST" class="flex items-center flex-col w-full">
+      {% csrf_token %}
+      <div class="flex justify-center">
+        <label
+          >Username:
+          <input required name="username" type="username" />
+        </label>
+      </div>
+      <div class="flex justify-center">
+        <label
+          >Password:
+          <input required name="password" type="password" />
+        </label>
+      </div>
+      
+      <button type="submit">Submit</button>
+    </form>
+    <a href="{% url 'login' %}">Login</a>
+  </div>
+  <button class="btn btn-outline-info">
+    <a href="{% provider_login_url 'google'%}?next=/">
+      <i class="fab fa-google"></i>
+      SignUp with Google
+    </a>
+  </button>
+  {% endblock %}
 </div>
-{% endblock %}

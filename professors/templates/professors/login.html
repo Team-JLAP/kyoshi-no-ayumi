@@ -2,10 +2,38 @@
 <!--prettier ignore -->
 {% load socialaccount %} {% block content %}
 <div>login page</div>
-<button class="btn btn-outline-info">
-  <a href="{% provider_login_url 'google'%}?next=/">
-    <i class="fab fa-google"></i>
-    Login with Google
-  </a>
-</button>
-{% endblock %}
+  <!--prettier-ignore-->
+  {% if messages %} {% for message in messages %}
+    {% if message.tags == 'error' %}
+  <p class="text-red-500">{{ message }}</p>
+  {% elif message.tags == 'success' %}
+  <p class="text-green-500">{{ message }}</p>
+  {% endif %} {% endfor %} {%endif %}
+<div>
+  <form method="POST" class="flex items-center flex-col w-full">
+      {% csrf_token %}
+      <div class="flex justify-center">
+        <label
+          >Username:
+          <input required name="username" type="username" />
+        </label>
+      </div>
+      <div class="flex justify-center">
+        <label
+          >Password:
+          <input required name="password" type="password" />
+        </label>
+      </div>
+      
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  <a href="{% url 'signup' %}">Signup</a>
+  <button class="btn btn-outline-info">
+    <a href="{% provider_login_url 'google'%}?next=/">
+      <i class="fab fa-google"></i>
+      Login with Google
+    </a>
+  </button>
+  {% endblock %}
+</div>

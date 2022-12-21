@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from .models import Course, Professor, Rating, Profile
+from .models import Course, Professor, Rating, Profile, User
 from .forms import RatingForm
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 def home(request):
     return render(request, 'professors/home.html')
@@ -58,11 +59,46 @@ def rating(request, course_id):
     return render(request, 'professors/rating.html', context=context)
 
 
-def login(request):
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request,user)
+                m = 'successfully logged in as ' + user.username
+                messages.success(request, m)
+                return redirect('home')
+            else:
+                messages.error(request, "Your account is disabled, try another account")
+                return redirect('login')
+        else:
+            messages.error(request, "Sorry, we can't find your account. Please try again.")
+            return redirect('login')
     return render(request, 'professors/login.html')
 
 def signup(request):
+    if request.method == "POST":
+        name = request.POST['username']
+        if User.objects.get(username=name) is None:
+            user = User.objects.create(username=name, password=request.POST['password'])
+            login(request, user)
+            m = 'successfully signed in as ' + user.username
+            messages.success(request, m)
+            return redirect('home')
+        else:
+            m = 'username "' + name + '" is already used.'
+            messages.error(request, m)
+            return redirect('signup')
+    
     return render(request, 'professors/signup.html')
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, 'You are logged out.')
+    return redirect('home')
+    
 
 def profile(request, user_id):
     return render(request, 'professors/profile.html')
