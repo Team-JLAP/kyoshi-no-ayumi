@@ -11,8 +11,9 @@ urlpatterns = [
     path('course/profid=<int:prof_id>/', views.prof_course, name='prof_course'),
     path('rating/courseid=<str:course_id>/', views.rating, name='rating'),
     
-    path('login/', views.login, name='login'),
+    path('login/', views.login_view, name='login'),
     path('signup/', views.signup, name='signup'),
+    path('logout/', views.logout_view, name='logout'),
     path('profile/userid=<int:user_id>/', views.profile, name='profile'),
     path('profile/setting/', views.profile_setting, name='profile_setting')
 ]
