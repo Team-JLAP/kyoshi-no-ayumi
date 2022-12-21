@@ -9,7 +9,10 @@ def home(request):
     return render(request, 'professors/home.html')
 
 def course_ratings(request, course_id):
-    course = Course.objects.get(id=course_id)
+    if Course.objects.filter(id=course_id).first() is not None:
+        course = Course.objects.get(id=course_id)
+    else:
+        return redirect('not_found')
     similarCourses = Course.objects.exclude(id=course_id).filter(subject=course.subject).filter(course_number=course.course_number)
     context = {
         'professor': course.professor.name,
@@ -35,12 +38,19 @@ def search_subject(request, subject):
     return render(request, 'professors/search_course.html', context={'results': courses})
 
 def prof_course(request, prof_id):
+    if Professor.objects.filter(id=prof_id).first() is not None:
+        professor = Professor.objects.get(id=prof_id)
+    else:
+        return redirect('not_found')
     professor = Professor.objects.get(id=prof_id)
     courses = Course.objects.filter(professor=professor)
     return render(request, 'professors/search_course.html', context={'results': courses})
 
 def rating(request, course_id):
-    course = Course.objects.get(id=course_id)
+    if Course.objects.filter(id=course_id).first() is not None:
+        course = Course.objects.get(id=course_id)
+    else:
+        return redirect('not_found')
     result = ''
     if request.method == "POST":
         form = RatingForm(request.POST)
@@ -110,3 +120,7 @@ def profile_setting(request):
 def signup_redirect(request):
     messages.error(request, "Something wrong here, it may be that you already have an account!")
     return redirect('home')
+
+
+def not_found(request):
+    return render(request, 'professors/notfound.html')
