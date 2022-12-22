@@ -56,9 +56,12 @@ def rating(request, course_id):
     if request.method == "POST":
         form = RatingForm(request.POST)
         if form.is_valid():
+            attend = request.POST['attendance']
+            if attend == 'None':
+                attend = None
             user = Profile.objects.get(user=request.user)
             Rating.objects.create(course=course, semester=request.POST['semester'], author=user, rate=request.POST['rate'], 
-                                attendance=request.POST['attendance'], grade=request.POST['grade'], comment=request.POST['comment'])
+                                attendance=attend, grade=request.POST['grade'], comment=request.POST['comment'])
             return redirect('course_ratings', course_id=course_id)
     grades = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D', 'F', 'N', 'Other']
     
@@ -118,6 +121,33 @@ def profile(request, username):
     profile = Profile.objects.get(user = user)
     ratings = profile.rating_set.all()
     return render(request, 'professors/profile.html', context={'profile': profile, 'ratings': ratings})
+
+@login_required
+def delete_rating(request, id):
+    rating = Rating.objects.filter(id=id).first()
+    if Rating.objects.filter(id=id).first() is None or request.user != rating.author.user:
+        return render(request, 'professors/404.html')
+    if request.method == 'POST':
+        rating.delete()
+        return redirect('profile', request.user.username)
+
+    return render(request, 'professors/delete_rating.html', context={'rating': rating})
+
+@login_required
+def edit_rating(request, id):
+    rating = Rating.objects.filter(id=id).first()
+    if Rating.objects.filter(id=id).first() is None or request.user != rating.author.user:
+        return render(request, 'professors/404.html')
+    if request.method == 'POST':
+        author=Profile.objects.get(user=request.user)
+        attend = request.POST['attendance']
+        if attend == 'None':
+            attend = None
+        Rating.objects.filter(id=id).update(semester=request.POST['semester'], author=author,
+                        rate=request.POST['rate'], attendance=attend, grade=request.POST['grade'], comment=request.POST['comment'])
+        return redirect('profile', request.user.username)
+    grades = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D', 'F', 'N', 'Other']
+    return render(request, 'professors/edit_rating.html', context={'rating': rating, 'grades': grades})
 
 
 def signup_redirect(request):

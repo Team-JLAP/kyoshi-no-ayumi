@@ -10,6 +10,8 @@ urlpatterns = [
     path('search/subject=<str:subject>/', views.search_subject, name='search_subject'),
     path('course/profid=<int:prof_id>/', views.prof_course, name='prof_course'),
     path('rating/courseid=<str:course_id>/', views.rating, name='rating'),
+    path('delete/<int:id>/', views.delete_rating, name='delete_rating'),
+    path('edit/<int:id>/', views.edit_rating, name='edit_rating'),
     
     path('login/', views.login_view, name='login'),
     path('signup/', views.signup, name='signup'),
