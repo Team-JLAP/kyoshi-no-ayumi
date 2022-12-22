@@ -1,6 +1,12 @@
 {% extends 'professors/base.html' %} {% block content %}
 <div>
   <p>User Profile</p>
+
+  <p>{{ profile.user }}</p>
+  <p>{{ profile.school }}</p>
+  {% for rating in ratings %}
+  <p>{{rating.rate}}</p>
+  {% endfor %}
   <p><a class="underline text-blue-500" href="{% url 'home' %}">Home</a></p>
 </div>
 {% endblock %}

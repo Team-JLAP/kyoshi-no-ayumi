@@ -4,6 +4,7 @@ from .forms import RatingForm
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     return render(request, 'professors/home.html')
@@ -110,11 +111,13 @@ def logout_view(request):
     return redirect('home')
     
 
-def profile(request, user_id):
-    return render(request, 'professors/profile.html')
-
-def profile_setting(request):
-    return render(request, 'professors/profile_setting.html')
+def profile(request, username):
+    user = User.objects.filter(username=username).first()
+    if user is None:
+        return render(request, 'professors/404.html')
+    profile = Profile.objects.get(user = user)
+    ratings = profile.rating_set.all()
+    return render(request, 'professors/profile.html', context={'profile': profile, 'ratings': ratings})
 
 
 def signup_redirect(request):
