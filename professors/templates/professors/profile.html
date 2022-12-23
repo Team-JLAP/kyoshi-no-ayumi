@@ -1,6 +1,15 @@
 {% extends 'professors/base.html' %} {% block content %}
 <div>
   <p>User Profile</p>
+
+  <p>{{ profile.user }}</p>
+  <p>{{ profile.school }}</p>
+  {% for rating in ratings %}
+  <p>{{rating.rate}}</p>
+  {% if user == profile.user %}
+  <a href="{% url 'delete_rating' rating.id %}">Delete</a>
+  <a href="{% url 'edit_rating' rating.id %}">Edit</a>
+  {% endif %} {% endfor %}
   <p><a class="underline text-blue-500" href="{% url 'home' %}">Home</a></p>
 </div>
 {% endblock %}

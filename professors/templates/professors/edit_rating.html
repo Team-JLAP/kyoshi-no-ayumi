@@ -1,0 +1,80 @@
+{% extends 'professors/base.html' %} {% block content %}
+<div>
+  <div class="flex w-2/5 mx-auto">
+    <form method="POST" class="flex items-center flex-col w-full">
+      {% csrf_token %}
+      <div class="flex justify-center">
+        <h1>{{ rating.course }}</h1>
+      </div>
+      <div class="flex justify-center">
+        <label
+          >Semester:
+          <input
+            required
+            name="semester"
+            type="text"
+            value="{{ rating.semester }}"
+          />
+        </label>
+      </div>
+      <div>
+        <label
+          >Rate:
+          <input
+            required
+            type="number"
+            min="1"
+            max="5"
+            name="rate"
+            value="{{ rating.rate }}"
+          />
+        </label>
+      </div>
+      <div>
+        <label
+          >Attendance:
+          <select name="attendance">
+            {% if rating.attendance %}
+            <option value="True" selected>Yes</option>
+            <option value="False">No</option>
+            <option value="None">Not Sure</option>
+            {% elif rating.attendance == False %}
+            <option value="True">Yes</option>
+            <option value="False" selected>No</option>
+            <option value="None">Not Sure</option>
+            {% else %}
+            <option value="True">Yes</option>
+            <option value="False">No</option>
+            <option value="None" selected>Not Sure</option>
+            {% endif %}
+          </select>
+        </label>
+      </div>
+      <div>
+        <label
+          >Grade:
+          <select name="grade">
+            {% for grade in grades %} {% if rating.grade == grade %}
+            <option value="{{ grade }}" selected>{{ grade }}</option>
+            {% else %}
+            <option value="{{ grade }}">{{ grade }}</option>
+            {% endif %} {% endfor %}
+          </select>
+        </label>
+      </div>
+      <div>
+        <label
+          >Comment:
+          <input
+            required
+            name="comment"
+            type="text"
+            value="{{ rating.comment }}"
+          />
+        </label>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
